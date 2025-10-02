@@ -3,6 +3,7 @@ import { Navigation, Menu, X, Globe, User } from "lucide-react";
 import { useState } from "react";
 import { AuthModal } from "./AuthModal";
 import { UserProfile } from "./UserProfile";
+import { NavLink, useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   user?: {
@@ -21,6 +22,15 @@ export function Header({ user, onLogout, onNavigate, currentPage }: HeaderProps)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'login' | 'register'>('login');
+  const navigate = useNavigate();
+
+  function MobileNavButton({ to, children } : { to: string, children: React.ReactNode }){
+    return (
+      <button onClick={() => { setIsMobileMenuOpen(false); navigate(to); }} className="px-4 py-2 hover:bg-muted rounded-lg transition-colors text-left">
+        {children}
+      </button>
+    );
+  }
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -43,38 +53,10 @@ export function Header({ user, onLogout, onNavigate, currentPage }: HeaderProps)
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <button 
-              onClick={() => onNavigate?.('destinations')}
-              className={`hover:text-primary transition-colors ${
-                currentPage === 'destinations' ? 'text-primary font-medium' : ''
-              }`}
-            >
-              Destinations
-            </button>
-            <button 
-              onClick={() => onNavigate?.('experiences')}
-              className={`hover:text-primary transition-colors ${
-                currentPage === 'experiences' ? 'text-primary font-medium' : ''
-              }`}
-            >
-              Experiences
-            </button>
-            <button 
-              onClick={() => onNavigate?.('guides')}
-              className={`hover:text-primary transition-colors ${
-                currentPage === 'guides' ? 'text-primary font-medium' : ''
-              }`}
-            >
-              Travel Guides
-            </button>
-            <button 
-              onClick={() => onNavigate?.('about')}
-              className={`hover:text-primary transition-colors ${
-                currentPage === 'about' ? 'text-primary font-medium' : ''
-              }`}
-            >
-              About
-            </button>
+            <NavLink to="/" className={(navData: { isActive: boolean }) => `hover:text-primary transition-colors ${navData.isActive? 'text-primary font-medium':''}`} >Destinations</NavLink>
+            <NavLink to="/experiences" className={(navData: { isActive: boolean }) => `hover:text-primary transition-colors ${navData.isActive? 'text-primary font-medium':''}`} >Experiences</NavLink>
+            <NavLink to="/guides" className={(navData: { isActive: boolean }) => `hover:text-primary transition-colors ${navData.isActive? 'text-primary font-medium':''}`} >Travel Guides</NavLink>
+            <NavLink to="/about" className={(navData: { isActive: boolean }) => `hover:text-primary transition-colors ${navData.isActive? 'text-primary font-medium':''}`} >About</NavLink>
           </nav>
 
           {/* Desktop Actions */}
@@ -112,53 +94,13 @@ export function Header({ user, onLogout, onNavigate, currentPage }: HeaderProps)
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
+          {isMobileMenuOpen && (
           <div className="md:hidden border-t bg-background">
             <nav className="flex flex-col py-4 space-y-2">
-              <button 
-                onClick={() => {
-                  onNavigate?.('destinations');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`px-4 py-2 hover:bg-muted rounded-lg transition-colors text-left ${
-                  currentPage === 'destinations' ? 'bg-muted text-primary font-medium' : ''
-                }`}
-              >
-                Destinations
-              </button>
-              <button 
-                onClick={() => {
-                  onNavigate?.('experiences');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`px-4 py-2 hover:bg-muted rounded-lg transition-colors text-left ${
-                  currentPage === 'experiences' ? 'bg-muted text-primary font-medium' : ''
-                }`}
-              >
-                Experiences
-              </button>
-              <button 
-                onClick={() => {
-                  onNavigate?.('guides');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`px-4 py-2 hover:bg-muted rounded-lg transition-colors text-left ${
-                  currentPage === 'guides' ? 'bg-muted text-primary font-medium' : ''
-                }`}
-              >
-                Travel Guides
-              </button>
-              <button 
-                onClick={() => {
-                  onNavigate?.('about');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`px-4 py-2 hover:bg-muted rounded-lg transition-colors text-left ${
-                  currentPage === 'about' ? 'bg-muted text-primary font-medium' : ''
-                }`}
-              >
-                About
-              </button>
+              <MobileNavButton to="/">Destinations</MobileNavButton>
+              <MobileNavButton to="/experiences">Experiences</MobileNavButton>
+              <MobileNavButton to="/guides">Travel Guides</MobileNavButton>
+              <MobileNavButton to="/about">About</MobileNavButton>
               <div className="flex flex-col gap-2 px-4 pt-4 border-t">
                 {user ? (
                   <div className="space-y-2">

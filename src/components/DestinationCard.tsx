@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { MapPin, Calendar, DollarSign, Heart } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface DestinationCardProps {
   id: string;
@@ -35,6 +36,7 @@ export function DestinationCard({
   onExplore
 }: DestinationCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const navigate = useNavigate();
 
   const getBudgetColor = (budget: string) => {
     switch (budget.toLowerCase()) {
@@ -124,10 +126,7 @@ export function DestinationCard({
 
         <Button 
           className="w-full"
-          onClick={() => onExplore?.({
-            id, name, country, description, image, category, 
-            bestTime, budget, activities, rating, climate
-          })}
+          onClick={() => navigate(`/destinations/${id}`)}
         >
           Explore Destination
         </Button>
