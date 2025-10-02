@@ -23,14 +23,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Archive production artifacts
-        run: |
-          mkdir -p deploy_artifact
-          cp -r dist/* deploy_artifact/
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: deploy_artifact
+          package: './dist'
